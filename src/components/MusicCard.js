@@ -32,6 +32,7 @@ class MusicCard extends React.Component {
       loadingFaroviteMusic,
       favoriteSongs,
       targetId } = this.state;
+    console.log(targetId);
     return (
       <div>
         {loading ? (
