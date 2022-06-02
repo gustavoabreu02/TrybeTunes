@@ -48,7 +48,6 @@ class Search extends React.Component {
       loadingComponent: true,
     }), async () => {
       const resulSearchAlbumAPI = await searchAlbumsAPI(searchInput);
-      console.log(resulSearchAlbumAPI);
       if (resulSearchAlbumAPI.length === 0) {
         this.setState({
           nenhumAlbumEncontrado: true,

@@ -13,13 +13,17 @@ class MusicCard extends React.Component {
       loadingFaroviteMusic: false,
       favoriteSongs: [],
       targetId: [],
+      loadingChecked: true,
     };
   }
 
   async componentDidMount() {
     const { mathParams } = this.props;
     const resulMusicAPI = await getMusics(mathParams.id);
+    const favSongs = await getFavoriteSongs();
     this.setState({
+      favoriteSongs: favSongs,
+      loadingChecked: true,
       objMusic: resulMusicAPI,
       loading: false,
     });
@@ -31,8 +35,9 @@ class MusicCard extends React.Component {
       loading,
       loadingFaroviteMusic,
       favoriteSongs,
-      targetId } = this.state;
-    console.log(targetId);
+      targetId,
+      loadingChecked } = this.state;
+    console.log(favoriteSongs);
     return (
       <div>
         {loading ? (
@@ -60,26 +65,33 @@ class MusicCard extends React.Component {
                         data-testid={ `checkbox-music-${value.trackId}` }
                         id={ value.trackId }
                         type="checkbox"
-                        defaultChecked={ targetId.some((id) => id === value.trackId) }
-                        onClick={ ({ target }) => {
+                        defaultChecked={ loadingChecked ? (
+                          favoriteSongs.some((songsId) => (
+                            songsId.trackId === value.trackId
+                          ))
+                        ) : (
+                          targetId.some((id) => id === value.trackId)
+                        ) }
+                        onChange={ ({ target }) => {
                           const songs = objMusic.filter((song) => song.kind);
                           const musicFavorite = songs.find((song) => (
                             song.trackId === Number(target.id)
                           ));
-                          targetId.push(Number(target.id));
+                          this.setState({
+                            loadingChecked: false,
+                          }, () => {
+                            targetId.push(Number(target.id));
+                          });
                           this.setState({
                             loadingFaroviteMusic: true,
                           }, async () => {
                             if (target.checked) {
                               await addSong(musicFavorite);
                             }
-                            const favSongs = await getFavoriteSongs();
                             this.setState({
-                              favoriteSongs: favSongs,
                               loadingFaroviteMusic: false,
                             }, () => {
                             });
-                            console.log(favoriteSongs);
                           });
                         } }
                       />
