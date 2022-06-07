@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
 import Carregando from '../pages/Carregando';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
   constructor() {
@@ -37,7 +37,6 @@ class MusicCard extends React.Component {
       favoriteSongs,
       targetId,
       loadingChecked } = this.state;
-    console.log(favoriteSongs);
     return (
       <div>
         {loading ? (
@@ -87,10 +86,11 @@ class MusicCard extends React.Component {
                           }, async () => {
                             if (target.checked) {
                               await addSong(musicFavorite);
+                            } else {
+                              await removeSong(musicFavorite);
                             }
                             this.setState({
                               loadingFaroviteMusic: false,
-                            }, () => {
                             });
                           });
                         } }
