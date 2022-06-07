@@ -30,7 +30,6 @@ class FavMusicCard extends React.Component {
             {loadingSongs ? (
               <div>
                 {songsFav
-                  .filter((value) => value.kind)
                   .map((value) => (
                     <div key={ value.trackId }>
                       <p>{value.trackName}</p>
@@ -41,7 +40,7 @@ class FavMusicCard extends React.Component {
                       >
                         <track kind="captions" />
                       </audio>
-                      <label htmlFor="favorites-checkbox">
+                      <label htmlFor={ value.trackId }>
                         Favorita
                         <input
                           data-testid={ `checkbox-music-${value.trackId}` }
@@ -52,8 +51,7 @@ class FavMusicCard extends React.Component {
                             this.setState({
                               loadingSongs: false,
                             });
-                            const songs = songsFav.filter((song) => song.kind);
-                            const musicFavorite = songs.find(
+                            const musicFavorite = songsFav.find(
                               (song) => song.trackId === Number(target.id),
                             );
                             await removeSong(musicFavorite);

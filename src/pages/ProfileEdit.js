@@ -21,7 +21,6 @@ class ProfileEdit extends React.Component {
   }
 
   async componentDidMount() {
-    this.verificaButton();
     const perfil = await getUser();
     this.setState({
       perfilName: perfil.name,
@@ -29,6 +28,8 @@ class ProfileEdit extends React.Component {
       perfilDesc: perfil.description,
       perfilImage: perfil.image,
       loading: false,
+    }, () => {
+      this.verificaButton();
     });
   }
 
